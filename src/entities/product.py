@@ -7,3 +7,11 @@ class Product:
 
     def __str__(self) -> str:
         return f'{self.name}, {self.price}, {self.store}, {"Disponível" if self.available else "Indisponível"}'
+
+    def to_object(self):
+        return {
+            'available': self.available,
+            'name': self.name,
+            'price': self.price,
+            'store': self.store
+        }
