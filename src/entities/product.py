@@ -1,7 +1,8 @@
 class Product:
-    def __init__(self, name, price, available, store) -> None:
+    def __init__(self, name, price, available, store, link='') -> None:
         self.name = name
         self.price = price
+        self.link = link
         self.available = available
         self.store = store
 
@@ -13,5 +14,6 @@ class Product:
             'available': self.available,
             'name': self.name,
             'price': self.price,
-            'store': self.store
+            'store': self.store,
+            'link': self.link
         }
