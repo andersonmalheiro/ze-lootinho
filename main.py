@@ -1,15 +1,31 @@
-from src.stores.kabum.nvidia_serie_16 import nvidia_serie_16_search
+from typing import Sequence
+
+from src.entities.product import Product
+from src.products.gpus import gpu_list
+from src.products.cpus import cpus_list
 from src.stores.kabum.search import search
-from src.stores.terabyte.nvidia import nvidia
-from src.stores.terabyte.search_selenium import terabyte_nvidia
+from src.utils.results_to_json import res_to_json
 
 
 def main():
-    # kabum_serie_16 = nvidia_serie_16_search()
-    terabyte_results = terabyte_nvidia()
+    results: Sequence[Product] = []
 
-    for p in terabyte_results:
-        print(p)
+    for p in gpu_list:
+        search_res = search(p)
+
+        print("filtering products...")
+        filtered = list(
+            filter(lambda item: item.name.find(p) != -1 and item.available, search_res))
+
+        results.extend(filtered)
+
+    print("ordering by best prices...")
+    ordered_by_price = sorted(results, key=lambda item: item.price)
+
+    print("generating JSON...")
+    print(res_to_json(ordered_by_price))
+
+    print("\ndone.")
 
 
 if __name__ == '__main__':
