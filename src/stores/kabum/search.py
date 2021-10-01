@@ -1,7 +1,10 @@
 from typing import Sequence
 from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
+
 from src.entities.product import Product
+from src.utils.kabum.get_product_data import get_product_data
 
 
 def search(product_name) -> Sequence[Product]:
@@ -15,26 +18,10 @@ def search(product_name) -> Sequence[Product]:
     html = urlopen(url)
     bs = BeautifulSoup(html, 'html.parser')
 
-    print("searching products...")
     product_cards = bs.find_all('div', {'class': 'productCard'})
 
     for card in product_cards:
-        name = card.find('h2', {'class': 'nameCard'}).text
+        product = get_product_data(card)
+        products.append(product)
 
-        price: str = card.find('span', {'class': 'priceCard'}).text.replace(".", "").replace(
-            ",", ".").replace("R$", "").strip()
-
-        formated_price = 0
-
-        try:
-            formated_price = float(price)
-        except:
-            pass
-
-        unavailable = card.find('div', {'class': 'unavailableFooterCard'})
-
-        products.append(Product(name=name.lower(), price=formated_price,
-                                available=not bool(unavailable), store="Kabum"))
-
-    print("products obtained.")
     return products
