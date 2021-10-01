@@ -1,0 +1,9 @@
+env/
+*.pyc
+
+/user-data/*
+!/user-data/.gitkeep
+/screenshots/*
+!/screenshots/.gitkeep
+/src/drivers/*
+!/src/drivers/.gitkeep
